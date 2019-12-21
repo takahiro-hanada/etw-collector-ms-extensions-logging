@@ -3,7 +3,7 @@
   <Identity Name="723f0cce-7036-4b93-9235-7b390ad1d192" Publisher="CN=user" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="723f0cce-7036-4b93-9235-7b390ad1d192" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>SampleLogger</DisplayName>
+    <DisplayName>EtwCollector SampleLogger</DisplayName>
     <PublisherDisplayName>user</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="SampleLogger.App">
-      <uap:VisualElements DisplayName="SampleLogger" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="SampleLogger" BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="EtwCollector SampleLogger" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="SampleLogger" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
