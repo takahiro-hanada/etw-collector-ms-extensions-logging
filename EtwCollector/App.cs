@@ -9,7 +9,11 @@ namespace EtwCollector
     {
         static void Main(string[] args)
         {
-            if (Debugger.IsAttached)
+            if (args?.Any(o => !string.IsNullOrWhiteSpace(o)) == true)
+            {
+                VerbInvoker.Invoke(args);
+            }
+            else
             {
                 args = new[] { "--help" };
 
@@ -20,13 +24,6 @@ namespace EtwCollector
                     Console.Write('>');
 
                     args = Console.ReadLine().Split(' ');
-                }
-            }
-            else
-            {
-                if (args?.Any(o => !string.IsNullOrWhiteSpace(o)) == true)
-                {
-                    VerbInvoker.Invoke(args);
                 }
             }
         }
