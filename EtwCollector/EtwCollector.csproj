@@ -7,11 +7,12 @@
     <ProjectGuid>{FC1A5675-713C-4367-AC9F-966E7442DA1A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>EtwCollector</RootNamespace>
-    <AssemblyName>EtwCollector</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <AssemblyName>etwc</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
