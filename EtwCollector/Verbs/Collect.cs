@@ -10,6 +10,7 @@ using EtwStream;
 using Microsoft.Extensions.Logging;
 using EtwCollector.Properties;
 using System.Diagnostics;
+using Microsoft.Diagnostics.Tracing;
 
 namespace EtwCollector.Verbs
 {
@@ -69,7 +70,19 @@ namespace EtwCollector.Verbs
 
                 File.AppendAllLines(csvPath, new[] { csvHeaderLine }, csvEncoding);
             }
-            
+
+            object payloadByNameOrNull(TraceEvent traceEvent, string payloadName)
+            {
+                try
+                {
+                    return traceEvent.PayloadByName(payloadName);
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    return null;
+                }
+            }
+
             using (ObservableEventListener
                 .FromTraceEvent(ProviderName)
                 //.Do(o => Console.WriteLine(o.Dump()))
@@ -83,24 +96,27 @@ namespace EtwCollector.Verbs
                     traceEvent,
                     payloads = traceEvent
                         .PayloadNames
-                        .Select(payloadName => new { payloadName, payloadValue = traceEvent.PayloadByName(payloadName) })
+                        .Select(payloadName => new { payloadName, payloadValue = payloadByNameOrNull(traceEvent,payloadName) })
+                        .Where(payload => payload.payloadValue != null)
                         .ToDictionary(o => o.payloadName, o => o.payloadValue)
                 })
                 .Select(o => new
                 {
                     o.traceEvent,
-                    level = o.payloads.TryGetValue("Level", out object oLevel) ? (LogLevel)oLevel : default,
+                    level = o.payloads.TryGetValue("Level", out object oLevel) ? (LogLevel)oLevel : default(LogLevel?),
                     loggerName = o.payloads.TryGetValue("LoggerName", out object oLoggerName) ? (string)oLoggerName : default,
                     eventId = o.payloads.TryGetValue("EventId", out object oEventId) ? (string)oEventId : default,
                     formattedMessage = o.payloads.TryGetValue("FormattedMessage", out object oFormattedMessage) ? (string)oFormattedMessage : default,
                 })
+                .Where(o => o.level.HasValue)
+                .Where(o => o.loggerName != null)
                 .Where(o => !Filters.Any() || Filters.Any(filter => o.loggerName.StartsWith(filter)))
-                .Where(o => o.level >= Level)
+                .Where(o => o.level.Value >= Level)
                 .Subscribe(o =>
                 {
                     if (!ScreenOff)
                     {
-                        var (label, color) = GetLogLevelOutput(o.level);
+                        var (label, color) = GetLogLevelOutput(o.level.Value);
                         Console.ForegroundColor = color ?? Console.ForegroundColor;
                         Console.Write($"{label}:");
                         Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -108,8 +124,9 @@ namespace EtwCollector.Verbs
                         Console.ResetColor();
                         Console.WriteLine($" {o.loggerName}/{o.eventId}");
                         Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.WriteLine(string.Empty.PadLeft(6) + o.formattedMessage.Replace(Environment.NewLine, Environment.NewLine + string.Empty.PadLeft(6)));
+                        Console.WriteLine(string.Empty.PadLeft(6) + o.formattedMessage?.Replace(Environment.NewLine, Environment.NewLine + string.Empty.PadLeft(6)));
                         Console.ResetColor();
+                        Console.WriteLine();
                     }
 
                     if (Csv)
@@ -146,7 +163,7 @@ namespace EtwCollector.Verbs
                 case LogLevel.Warning: return ("warn", ConsoleColor.DarkYellow);
                 case LogLevel.Error: return ("fail", ConsoleColor.DarkRed);
                 case LogLevel.Critical: return ("crit", ConsoleColor.DarkMagenta);
-                default: throw new ArgumentOutOfRangeException(nameof(level));
+                default: return ("????", null);
             }
         }
     }
