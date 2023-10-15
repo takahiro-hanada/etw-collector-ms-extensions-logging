@@ -2,7 +2,8 @@
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("ETW Collector for Microsoft-Extensions-Logging")]
-[assembly: AssemblyProduct("ETW Collector for Microsoft-Extensions-Logging")]
-[assembly: AssemblyCopyright("(C) 2019 TAKAHIRO HANADA")]
+[assembly: AssemblyProduct("EtwCollector")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyCopyright("(C) 2023 TAKAHIRO HANADA")]
 [assembly: ComVisible(false)]
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("2.0.0")]
