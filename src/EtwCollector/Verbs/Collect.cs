@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
@@ -86,11 +85,17 @@ namespace EtwCollector.Verbs
 
             using (ObservableEventListener
                 .FromTraceEvent(ProviderName)
-                //.Do(o => Console.WriteLine(o.Dump()))
-                //.Do(o => Console.WriteLine(o.DumpPayload()))
-                //.Do(o => Console.WriteLine(o.DumpPayloadOrMessage()))
-                //.Do(o => Console.WriteLine(o.ToJson()))
-                .Do(o => Debug.WriteLine(o.ToString()))
+                .Do(o =>
+                {
+                    if (Verbose)
+                    {
+                        //Console.WriteLine(o.Dump());
+                        //Console.WriteLine(o.DumpPayload());
+                        //Console.WriteLine(o.DumpPayloadOrMessage());
+                        //Console.WriteLine(o.ToJson());
+                        Console.WriteLine(o.ToString());
+                    }
+                })
                 .Where(traceEvent => traceEvent.EventName == FormattedMessageEventName)
                 .Select(traceEvent => new
                 {
