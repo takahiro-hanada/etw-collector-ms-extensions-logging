@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ソリューション項目
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleLogger.WpfApp", "SampleLogger.WpfApp\SampleLogger.WpfApp.csproj", "{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,26 @@ Global
 		{DE17B426-1956-45C5-90BF-46ADB6BE5026}.Release|x86.ActiveCfg = Release|x86
 		{DE17B426-1956-45C5-90BF-46ADB6BE5026}.Release|x86.Build.0 = Release|x86
 		{DE17B426-1956-45C5-90BF-46ADB6BE5026}.Release|x86.Deploy.0 = Release|x86
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|ARM.Build.0 = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|x64.Build.0 = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Debug|x86.Build.0 = Debug|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|ARM.ActiveCfg = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|ARM.Build.0 = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|ARM64.Build.0 = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|x64.ActiveCfg = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|x64.Build.0 = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|x86.ActiveCfg = Release|Any CPU
+		{4B12BA85-0CFF-4D9B-AA32-F822D54892B2}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

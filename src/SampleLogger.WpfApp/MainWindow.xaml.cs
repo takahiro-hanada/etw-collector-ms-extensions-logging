@@ -1,24 +1,24 @@
-﻿using Microsoft.Extensions.Logging;
-using Windows.UI.Xaml.Controls;
+﻿using System.Windows;
+using Microsoft.Extensions.Logging;
 
-namespace SampleLogger.UwpApp
+namespace SampleLogger.WpfApp
 {
-    sealed partial class MainPage : Page
+    public partial class MainWindow : Window
     {
-        readonly ILogger _logger = App.MyLoggerFactory.CreateLogger<MainPage>();
+        readonly ILogger _logger = App.MyLoggerFactory.CreateLogger<MainWindow>();
 
-        public MainPage() => InitializeComponent();
+        public MainWindow() => InitializeComponent();
 
-        void LogCritical()
+        void Button_Click(object sender, RoutedEventArgs e)
         {
-            var eventId = EventIdToggle.IsOn ? EventNameToggle.IsOn ?
+            var eventId = EventIdCheck.IsChecked == true ? EventNameCheck.IsChecked == true ?
                 new EventId(1, "testEventName") :
                 new EventId(1) :
                 default(EventId?);
 
             if (eventId.HasValue)
             {
-                if (ArgsToggle.IsOn)
+                if (ArgsCheck.IsChecked == true)
                 {
                     _logger.LogCritical(eventId.Value, "testMessage {0}", "testArg");
                 }
@@ -29,7 +29,7 @@ namespace SampleLogger.UwpApp
             }
             else
             {
-                if (ArgsToggle.IsOn)
+                if (ArgsCheck.IsChecked == true)
                 {
                     _logger.LogCritical("testMessage {0}", "testArg");
                 }

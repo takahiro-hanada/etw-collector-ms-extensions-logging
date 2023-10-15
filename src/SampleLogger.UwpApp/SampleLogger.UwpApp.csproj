@@ -7,7 +7,7 @@
     <ProjectGuid>{DE17B426-1956-45C5-90BF-46ADB6BE5026}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SampleLogger</RootNamespace>
+    <RootNamespace>SampleLogger.UwpApp</RootNamespace>
     <AssemblyName>SampleLogger.UwpApp</AssemblyName>
     <DefaultLanguage>en-us</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
