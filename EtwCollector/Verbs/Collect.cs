@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CommandLine;
-using EtwStream;
-using Microsoft.Extensions.Logging;
 using EtwCollector.Properties;
-using System.Diagnostics;
+using EtwStream;
 using Microsoft.Diagnostics.Tracing;
+using Microsoft.Extensions.Logging;
 
 namespace EtwCollector.Verbs
 {
@@ -21,7 +21,7 @@ namespace EtwCollector.Verbs
 
         const string FormattedMessageEventName = "FormattedMessage";
 
-        [Option('f',"filters", Separator =',')]
+        [Option('f', "filters", Separator = ',')]
         public IEnumerable<string> Filters { get; set; }
 
         [Option('l', "level", Default = LogLevel.Trace, HelpText = nameof(Resources.Collect_Level_HelpText), ResourceType = typeof(Resources))]
@@ -49,7 +49,7 @@ namespace EtwCollector.Verbs
         {
             await Task.Yield();
 
-            var csvPath = $"{CsvFileNamePrefix?.TrimEnd()}{(string.IsNullOrWhiteSpace(CsvFileNamePrefix) ? "":"_")}{DateTime.Now:yy-MM-dd_HH-mm-ss}";
+            var csvPath = $"{CsvFileNamePrefix?.TrimEnd()}{(string.IsNullOrWhiteSpace(CsvFileNamePrefix) ? "" : "_")}{DateTime.Now:yy-MM-dd_HH-mm-ss}";
             csvPath = Path.ChangeExtension(csvPath, "csv");
             csvPath = Path.Combine(CsvFolderName ?? string.Empty, csvPath);
             var csvEncoding = Encoding.GetEncoding(CsvEncodingName);
@@ -66,6 +66,7 @@ namespace EtwCollector.Verbs
                     "LoggerName",
                     "EventId",
                     "FormattedMessage",
+                    "EventName",
                 }.Select(v => "\"" + v + "\""));
 
                 File.AppendAllLines(csvPath, new[] { csvHeaderLine }, csvEncoding);
@@ -96,17 +97,18 @@ namespace EtwCollector.Verbs
                     traceEvent,
                     payloads = traceEvent
                         .PayloadNames
-                        .Select(payloadName => new { payloadName, payloadValue = payloadByNameOrNull(traceEvent,payloadName) })
+                        .Select(payloadName => new { payloadName, payloadValue = payloadByNameOrNull(traceEvent, payloadName) })
                         .Where(payload => payload.payloadValue != null)
                         .ToDictionary(o => o.payloadName, o => o.payloadValue)
                 })
                 .Select(o => new
                 {
                     o.traceEvent,
-                    level = o.payloads.TryGetValue("Level", out object oLevel) ? (LogLevel)oLevel : default(LogLevel?),
-                    loggerName = o.payloads.TryGetValue("LoggerName", out object oLoggerName) ? (string)oLoggerName : default,
-                    eventId = o.payloads.TryGetValue("EventId", out object oEventId) ? (string)oEventId : default,
-                    formattedMessage = o.payloads.TryGetValue("FormattedMessage", out object oFormattedMessage) ? (string)oFormattedMessage : default,
+                    level = o.payloads.TryGetValue("Level", out object oLevel) && oLevel is int level ? (LogLevel)level : default(LogLevel?),
+                    loggerName = o.payloads.TryGetValue("LoggerName", out object oLoggerName) && oLoggerName is string loggerName ? loggerName : default,
+                    eventId = o.payloads.TryGetValue("EventId", out object oEventId) && oEventId is int eventId ? eventId : default(int?),
+                    formattedMessage = o.payloads.TryGetValue("FormattedMessage", out object oFormattedMessage) && oFormattedMessage is string formattedMessage ? formattedMessage : default,
+                    eventName = o.payloads.TryGetValue("EventName", out object oEvenName) && oEvenName is string eventName ? eventName : default,
                 })
                 .Where(o => o.level.HasValue)
                 .Where(o => o.loggerName != null)
@@ -122,7 +124,7 @@ namespace EtwCollector.Verbs
                         Console.ForegroundColor = ConsoleColor.DarkBlue;
                         Console.Write($" {o.traceEvent.TimeStamp.ToString(TimeStampFormat)}");
                         Console.ResetColor();
-                        Console.WriteLine($" {o.loggerName}/{o.eventId}");
+                        Console.WriteLine($" {o.loggerName}{(o.eventId is null ? null : "/")}{o.eventId}{(o.eventName is null ? null : ":")}{o.eventName}");
                         Console.ForegroundColor = ConsoleColor.DarkGray;
                         Console.WriteLine(string.Empty.PadLeft(6) + o.formattedMessage?.Replace(Environment.NewLine, Environment.NewLine + string.Empty.PadLeft(6)));
                         Console.ResetColor();
@@ -131,7 +133,7 @@ namespace EtwCollector.Verbs
 
                     if (Csv)
                     {
-                        var csvLine = string.Join(",", new[]
+                        var csvLine = string.Join(",", new object[]
                         {
                             $"{o.traceEvent.TimeStamp}",
                             $"{o.traceEvent.TimeStampRelativeMSec}",
@@ -141,6 +143,7 @@ namespace EtwCollector.Verbs
                             o.loggerName,
                             o.eventId,
                             o.formattedMessage,
+                            o.eventName,
                         }.Select(v => "\"" + v + "\""));
 
                         File.AppendAllLines(csvPath, new[] { csvLine }, csvEncoding);

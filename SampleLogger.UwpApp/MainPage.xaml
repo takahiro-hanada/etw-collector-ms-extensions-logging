@@ -9,6 +9,9 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <StackPanel>
+        <ToggleSwitch x:Name="EventIdToggle" Header="EventId"/>
+        <ToggleSwitch x:Name="EventNameToggle" Header="EventName"/>
+        <ToggleSwitch x:Name="ArgsToggle" Header="Args"/>
         <Button Click="{x:Bind LogCritical}" >LogCritical</Button>
     </StackPanel>
 </Page>

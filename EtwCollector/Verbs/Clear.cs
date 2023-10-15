@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using CommandLine;
-using EtwStream;
 using EtwCollector.Properties;
+using EtwStream;
 
 namespace EtwCollector.Verbs
 {

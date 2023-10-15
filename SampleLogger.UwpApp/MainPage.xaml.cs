@@ -5,21 +5,44 @@ namespace SampleLogger
 {
     sealed partial class MainPage : Page
     {
-#pragma warning disable CS0618
-        ILogger Logger { get; } = new LoggerFactory()
-            .AddEventSourceLogger()
-            .AddDebug()
-            .CreateLogger<MainPage>();
-#pragma warning restore CS0618
+        readonly ILogger _logger;
 
         public MainPage()
         {
             InitializeComponent();
+
+            _logger = App.MyLoggerFactory.CreateLogger<MainPage>();
         }
 
         void LogCritical()
         {
-            Logger.LogCritical("test");
+            var eventId = EventIdToggle.IsOn ? EventNameToggle.IsOn ?
+                new EventId(1, "testEventName") :
+                new EventId(1) :
+                default(EventId?);
+
+            if (eventId.HasValue)
+            {
+                if (ArgsToggle.IsOn)
+                {
+                    _logger.LogCritical(eventId.Value, "testMessage {0}", "testArg");
+                }
+                else
+                {
+                    _logger.LogCritical(eventId.Value, "testMessage");
+                }
+            }
+            else
+            {
+                if (ArgsToggle.IsOn)
+                {
+                    _logger.LogCritical("testMessage {0}", "testArg");
+                }
+                else
+                {
+                    _logger.LogCritical("testMessage");
+                }
+            }
         }
     }
 }
